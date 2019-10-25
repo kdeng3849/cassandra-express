@@ -28,87 +28,24 @@ app.get('/', (req, res) => {
 app.post('/deposit', (req, res) => {
 
     console.log("fields:", req.fields);
-    console.log("files:", req.files);
-    res.end();
+    console.log("files:", req.files['contents']);
+    // res.end();
 
-    // console.log(req.body)
-    // res.json(req.body.filename)
+    var filename = req.fields.filename;
+    var file = req.files.contents;
 
-    // var getAllImgs = 'SELECT * FROM hw6.img';
-    // client.execute(getAllImgs, [], function(err, result) {
-    //     if(err) {
-    //         res.status(404).send({msg: err})
-    //     }
-    //     console.log(result)
-    //     console.log(result.rows)
-    //     res.json(result)
-    // })
-
-    var insertField, insertFile;
-
-    // new formidable.IncomingForm().parse(req)
-    // .on('field', (name, field) => {
-    //     // console.log('Field:', name, field)
-    //     insertField = field;
-    //     console.log('field: ', insertField)
-    // })
-    // .on('fileBegin', (name, file) => {
-    //     // console.log('Uploaded file:', name, file)
-    //     insertFile = file;
-    //     console.log('file: ', insertFile)
-    // })
-    // .on('aborted', () => {
-    //     console.error('Request aborted by the user')
-    // })
-    // .on('error', (err) => {
-    //     console.error('Error', err)
-    //     throw err
-    // })
-    // .on('end', () => {
-    //     var query = 'INSERT INTO hw6.img(filename, contents) VALUES(?, ?)';
-    //     client.execute(query, [insertField, insertFile], { prepare: true }, function(err, result) {
-    //         if(err) {
-    //             res.status(404).send({msg: err})
-    //         }
-    //         console.log(result)
-    //         // console.log(result)
-    //         // console.log(result.rows)
-    //         // res.json(result.rows[0])
-    //         res.json({status: 'OK'})
-    //     })
-    // })
-
-    // new formidable.IncomingForm().parse(req, (err, fields, files) => {
-    //     if (err) {
-    //       console.error('Error', err)
-    //       throw err
-    //     }
-
-    //     console.log('Fields', fields)
-    //     console.log('Files', files)
-    //     for (const file of Object.entries(files)) {
-    //       console.log(file)
-
-    //     // var getAllImgs = 'SELECT * FROM hw6.img';
-    //     // const query = 'SELECT name, email FROM users WHERE key = ?';
-    //     // client.execute(getAllImgs, [], function(err, result) {
-    //     //     if(err) {
-    //     //         res.status(404).send({msg: err})
-    //     //     }
-    //     //     res.json(result.rows)
-    //     // })
-
-    //     // client.execute(getAllImgs, [])
-    //     // //   .then(result => console.log('User with email %s', result.rows[0].email));
-    //     //     .then(result => {
-    //     //         console.log(result.rows)
-    //     //         res.json(result.rows);
-    //     //     })
-    //     //     .catch(error => console.log(error))
-    //     // }
-    //     // res.end()
-    // })
-    
+    var query = 'INSERT INTO hw6.img(filename, contents) VALUES(?, ?)';
+    client.execute(query, [filename, file], { prepare: true }, function(err, result) {
+        if(err) {
+            res.status(404).send({msg: err})
+        }
+        else
+            res.json({status: 'OK'})
+        // console.log(result)
+        // console.log(result)
+        // console.log(result.rows)
+        // res.json(result.rows[0])
+    })
 })
 
 

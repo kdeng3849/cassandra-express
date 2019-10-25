@@ -7,11 +7,11 @@
 </head>
 <body class="bg-light">
 <div class="container my-5">
-    <form action="/deposit" method="post" class="post-new">
+    <form action="/deposit" method="post" enctype="multipart/form-data" class="post-new">
         <h2 class="mb-3">Home</h2>
-        <!-- <div class="form-group">
-            <input type="text" name="filename" class="form-control" placeholder="What's happening?">
-        </div> -->
+        <div class="form-group">
+            <input type="text" name="filename" class="form-control" placeholder="File name">
+        </div>
         <!-- <div class="form-group">
             <div class="custom-file">
                 <input type="file" enctype="multipart/form-data" name="contents" class="custom-file-input" id="customFile">
@@ -19,7 +19,7 @@
             </div>
         </div> -->
         <div class="form-group">
-            <input type="file" enctype="multipart/form-data" name="contents" class="form-control-file" id="contents">
+            <input type="file" name="contents" class="form-control-file" id="contents">
           </div>
         <button type="submit" class="post-new btn btn-primary rounded-pill px-5">Deposit</button>
     </form>

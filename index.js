@@ -22,17 +22,45 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 })
 
-app.get('/deposit', (req, res) => {
+app.post('/deposit', (req, res) => {
     // console.log(req.body)
     // res.json(req.body.filename)
 
-    client.execute(query, ['oranges'], function(err, result) {
-        if(err) {
-            res.status(404).send({msg: err})
-        }
-        console.log(result)
-        console.log(result.rows[0].price_p_item)
-        res.json(result)
+    // var getAllImgs = 'SELECT * FROM hw6.img';
+    // client.execute(getAllImgs, [], function(err, result) {
+    //     if(err) {
+    //         res.status(404).send({msg: err})
+    //     }
+    //     console.log(result)
+    //     console.log(result.rows)
+    //     res.json(result)
+    // })
+
+    new formidable.IncomingForm().parse(req)
+    .on('field', (name, field) => {
+      console.log('Field:', name, field)
+    })
+    .on('file', (name, file) => {
+      console.log('Uploaded file:', name, file)
+    })
+    .on('aborted', () => {
+      console.error('Request aborted by the user')
+    })
+    .on('error', (err) => {
+      console.error('Error', err)
+      throw err
+    })
+    .on('end', () => {
+        var getAllImgs = 'SELECT * FROM hw6.img';
+        client.execute(getAllImgs, [], function(err, result) {
+            if(err) {
+                res.status(404).send({msg: err})
+            }
+            console.log(result)
+            console.log(result.rows)
+            res.json(result.rows[0])
+        })
+    //   res.end()
     })
 
     // new formidable.IncomingForm().parse(req, (err, fields, files) => {
@@ -52,7 +80,7 @@ app.get('/deposit', (req, res) => {
     //         if(err) {
     //             res.status(404).send({msg: err})
     //         }
-    //         console.log(result.rows.filename)
+    //         res.json(result.rows)
     //     })
         
     //     //   .then(result => console.log('User with email %s', result.rows[0].email));

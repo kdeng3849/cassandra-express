@@ -1,6 +1,8 @@
 const cassandra = require('cassandra-driver');
 const express = require('express');
 const formidableMiddleware = require('express-formidable');
+const fs = require('fs');
+const morgan = require('morgan');
 const path = require('path');
 
 const client = new cassandra.Client({ contactPoints: ['127.0.0.1'], localDataCenter: 'datacenter1'});
@@ -13,6 +15,7 @@ const app = express();
 
 app.use(express.json());
 app.use(formidableMiddleware());
+app.use(morgan('common'));
 // app.use(express.urlencoded());
 // app.use(express.urlencoded({extended: true})); 
 
@@ -26,26 +29,21 @@ app.get('/', (req, res) => {
 })
 
 app.post('/deposit', (req, res) => {
+    var query = 'INSERT INTO hw6.img (filename, contents) VALUES (?, ?)';
+    try {
+        var filename = req.fields.filename;
+        var file = fs.readFileSync(req.files.contents.path);
+    }
+    catch(error) {
+        res.json(error);
+    }
 
-    console.log("fields:", req.fields);
-    console.log("files:", req.files['contents']);
-    // res.end();
-
-    var filename = req.fields.filename;
-    var file = req.files.contents;
-
-    var query = 'INSERT INTO hw6.img(filename, contents) VALUES(?, ?)';
-    client.execute(query, [filename, file], { prepare: true }, function(err, result) {
-        if(err) {
-            res.status(404).send({msg: err})
-        }
-        else
-            res.json({status: 'OK'})
-        // console.log(result)
-        // console.log(result)
-        // console.log(result.rows)
-        // res.json(result.rows[0])
-    })
+    client.execute(query, [filename, file], { traceQuery: true })
+        .then(result => {
+            // console.log(result);
+            res.json(result);
+        })
+        .catch(error => res.status(404).send({ msg: error }));
 })
 
 

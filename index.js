@@ -22,10 +22,11 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 })
 
-app.post('/retrieve', (req, res) => {
+app.get('/retrieve', (req, res) => {
     var query = 'SELECT * FROM hw6.img WHERE filename=?'
     try {
-        var filename = req.body.filename;
+        // var filename = req.body.filename;
+        var filename = req.query.filename;
     }
     catch(error) {
         res.json(error);
@@ -34,7 +35,8 @@ app.post('/retrieve', (req, res) => {
     client.execute(query, [filename])
         .then(result => {
             var blob = result.rows[0].contents;
-            res.writeHead(200, {'Content-Type': 'image/jpeg'});
+            // res.writeHead(200, {'Content-Type': 'image/jpeg'});
+            res.type('jpeg')
             res.end(blob);
         })
         .catch(error => {
@@ -60,7 +62,8 @@ app.post('/retrieve', (req, res) => {
 //         .catch(error => res.status(404).send({ msg: error }));
 // })
 
-const PORT = process.env.PORT || 5000
+// const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 80
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`)
 })

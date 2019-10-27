@@ -1,7 +1,6 @@
 const cassandra = require('cassandra-driver');
 const express = require('express');
 const fileType = require('file-type');
-const fs = require('fs');
 const morgan = require('morgan');
 const path = require('path');
 
@@ -26,7 +25,6 @@ app.get('/', (req, res) => {
 app.get('/retrieve', (req, res) => {
     var query = 'SELECT * FROM hw6.img WHERE filename=?'
     try {
-        // var filename = req.body.filename;
         var filename = req.query.filename;
     }
     catch(error) {
@@ -38,7 +36,6 @@ app.get('/retrieve', (req, res) => {
             var blob = result.rows[0].contents;
             var contentType = fileType(blob)
             console.log(contentType)
-            // res.writeHead(200, {'Content-Type': 'image/jpeg'});
             res.type(contentType.mime)
             res.end(blob);
         })
@@ -47,23 +44,6 @@ app.get('/retrieve', (req, res) => {
             res.status(404);
         });
 })
-
-// app.post('/deposit', (req, res) => {
-//     var query = 'INSERT INTO hw6.img (filename, contents) VALUES (?, ?)';
-//     try {
-//         var filename = req.fields.filename;
-//         var file = fs.readFileSync(req.files.contents.path);
-//     }
-//     catch(error) {
-//         res.json(error);
-//     }
-
-//     client.execute(query, [filename, file], { traceQuery: true })
-//         .then(result => {
-//             res.json(result);
-//         })
-//         .catch(error => res.status(404).send({ msg: error }));
-// })
 
 // const PORT = process.env.PORT || 5000
 const PORT = process.env.PORT || 80

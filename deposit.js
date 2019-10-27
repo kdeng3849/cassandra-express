@@ -1,3 +1,5 @@
+// technically could have been in the index, but I'll leave this for the purposes of demonstrating express.Router
+
 var express = require('express');
 const cassandra = require('cassandra-driver');
 const formidableMiddleware = require('express-formidable');
@@ -13,14 +15,11 @@ client.connect(function(err, result) {
     console.log('cassandra connected');
 })
 
-
 router.post('', (req, res) => {
     var query = 'INSERT INTO hw6.img (filename, contents) VALUES (?, ?)';
     try {
         var filename = req.fields.filename;
         var file = fs.readFileSync(req.files.contents.path);
-        console.log(filename);
-        console.log(file);
     }
     catch(error) {
         res.json(error);
@@ -36,5 +35,5 @@ router.post('', (req, res) => {
         });
 })
 
-//export this router to use in our index.js
+// export this router to use in our index.js
 module.exports = router;

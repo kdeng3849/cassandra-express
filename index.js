@@ -1,5 +1,6 @@
 const cassandra = require('cassandra-driver');
 const express = require('express');
+const fileType = require('file-type');
 const fs = require('fs');
 const morgan = require('morgan');
 const path = require('path');
@@ -35,8 +36,10 @@ app.get('/retrieve', (req, res) => {
     client.execute(query, [filename])
         .then(result => {
             var blob = result.rows[0].contents;
+            var contentType = fileType(blob)
+            console.log(contentType)
             // res.writeHead(200, {'Content-Type': 'image/jpeg'});
-            res.type('jpeg')
+            res.type(contentType.mime)
             res.end(blob);
         })
         .catch(error => {

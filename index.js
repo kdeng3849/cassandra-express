@@ -35,7 +35,6 @@ app.get('/retrieve', (req, res) => {
         .then(result => {
             var blob = result.rows[0].contents;
             var contentType = fileType(blob)
-            console.log(contentType)
             res.type(contentType.mime)
             res.end(blob);
         })

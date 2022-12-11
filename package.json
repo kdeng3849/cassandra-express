@@ -11,7 +11,7 @@
   "dependencies": {
     "cassandra-driver": "^4.3.0",
     "connect-multiparty": "^2.2.0",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-formidable": "^1.2.0",
     "file-type": "^12.3.1",
     "morgan": "^1.9.1"
